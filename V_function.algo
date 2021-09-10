@@ -1,0 +1,59 @@
+FUNCTION dot_product(v1,v2 : ARRAY_OF FLOAT) : FLOAT
+VAR
+    x : FLOAT;
+BEGIN
+    x := v1[0]*v2[0] + v1[1]*v2[1];
+    RETURN x ;
+END
+
+FUNCTION read_n() : INTEGER
+VAR
+    n : INTEGER;
+BEGIN
+    REPEAT
+        Write("Enter the number of vectors (at least 2): ");
+        Read(n);
+    UNTIL (n>2)
+    RETURN n ;
+END
+
+PROCEDURE read_vectors(n : INTEGER , VAR m : ARRAY_OF FLOAT)
+VAR
+    i,j:INTEGER;
+BEGIN
+    FOR i FROM 0 TO n-1  DO
+        Write("Enter V",i," : ");
+        FOR j FROM 0 TO 1  DO
+            Read(m[i][j]);
+        END_FOR
+    END_FOR
+END
+
+ALGORITHM Dot product
+
+VAR
+pc : FLOAT;
+n,i,j : INTEGER;
+m : ARRAY_OF FLOAT[][2];
+v1,v2 : ARRAY_OF FLOAT[2];
+
+BEGIN
+n := read_n();
+read_vectors(n,m);
+FOR i FROM 0 TO n-1  DO
+    v1 := {m[i][0] , m[i][1]};
+    FOR j FROM 0 TO n-1  DO
+        IF (m[i][0]<>m[j][0])AND(m[i][1]<>m[j][1]) THEN
+            v2 := {m[j][0] , m[j][1]};
+            pc:=dot_product(v1,v2);
+        ELSE
+            v2 := {m[j+1][0] , m[j+1][1]};
+            pc:=dot_product(v1,v2);
+        END_IF
+        IF (pc=0) THEN
+            Write("The 2 vectors (",v1[0],",",v1[1],") and (",v2[0],",",v2[1],") are orthogonal.");
+        END_IF
+    END_FOR
+END_FOR
+
+END
